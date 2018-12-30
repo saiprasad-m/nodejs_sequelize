@@ -20,9 +20,6 @@ const Gig = db.define('gig', {
      },
      createdAt: { 
          type: Sequelize.STRING
-     },
-     updatedAt: { 
-         type: Sequelize.STRING
      }
 });
 
