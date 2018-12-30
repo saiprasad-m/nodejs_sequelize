@@ -9,11 +9,16 @@ db.authenticate()
 
 
 const app = express();
+// handle bars
+app.engine('handlebars', expressHandlebars({ defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // body parser
 app.use(express.urlencoded({extended:false}))
 
-app.get('/', (req, res) => res.send('index'))
+app.get('/', (req, res) => res.render('index', {layout: 'landing'}))
 app.use('/gigs', require('./routes/gigs'));
 
 const PORT = process.env.PORT || 5000;
