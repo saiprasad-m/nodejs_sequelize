@@ -14,6 +14,7 @@ const app = express();
 app.use(express.urlencoded({extended:false}))
 
 app.get('/', (req, res) => res.send('index'))
+app.use('/gigs', require('./routes/gigs'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT , console.log(`server started on port : ${PORT}`))
