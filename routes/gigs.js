@@ -72,6 +72,8 @@ router.post('/add', (req, res) => {
 router.get('/search', (req, res) => {
     const {term} = req.query;
 
+    term = term.toLowerCase();
+
     Gig.findAll( { where: 
         { technologies: { [Op.like]:'%' + term + '%'} }
     })
