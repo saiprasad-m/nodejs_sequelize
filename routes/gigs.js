@@ -2,15 +2,13 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 const Gig = require('../models/Gig');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 // Get Gig list
 router.get('/', (req, res) => 
     Gig.findAll()
-    .then(gigs => {
-        res.render('gigs', {
-            gigs
-        });
-    })
+    .then(gigs => res.render('gigs', {gigs}))
     .catch(err => console.log(err))
     
 );
@@ -67,6 +65,18 @@ router.post('/add', (req, res) => {
         .then(gig => res.redirect('/gigs'))
         .catch(err => console.log(err))
     }
+})
+
+
+// Search Gig
+router.get('/search', (req, res) => {
+    const {term} = req.query;
+
+    Gig.findAll( { where: 
+        { technologies: { [Op.like]:'%' + term + '%'} }
+    })
+        .then(gigs => res.render('gigs', {gigs}))
+        .catch(err => console.log(err));
 })
 
 module.exports = router
