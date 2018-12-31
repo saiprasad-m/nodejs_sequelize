@@ -22,26 +22,51 @@ router.get('/add', (req, res) => {
 
 // Add a Gig
 router.post('/add', (req, res) => {
-    const data = {
-        title: 'Looking for react dev',
-        technologies: 'react, javascript,html,css',
-        budget:'$3000',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ac justo at neque iaculis hendrerit. Fusce odio erat, lobortis ac accumsan eu, rutrum non nulla. Pellentesque sit amet sapien sed dolor pellentesque commodo dapibus at libero.',
-        contact_email: 'user@gmail.com'
-    }
-    let {title, technologies, budget, description, contact_email} = data;
-    // Insert to gigs table
+    
+    let {title, technologies, budget, description, contact_email} = req.body;
+    let errors = [];
 
-    Gig.create({
-        title: title,
-        technologies: technologies,
-        budget: budget,
-        description: description,
-        contact_email: contact_email,
-        createdAt:'2018'
-    })
+    // validate
+    if(!title) 
+        errors.push({mesg: 'Please provide a Title'})
+    if(!technologies) 
+        errors.push({mesg: 'Please add some Technologies'})
+    if(!description) 
+        errors.push({mesg: 'Please provide an elaborate Description'})
+    if(!contact_email) 
+        errors.push({mesg: 'Please provide a Contact email address'})
+
+
+    // Insert to gigs table
+    if(errors.length > 0) {
+        res.render('add', { 
+            errors, 
+            title, 
+            technologies, 
+            budget, 
+            description, 
+            contact_email
+        })
+    }
+    else {  
+        if(!budget) 
+            budget='Unknown'
+        else
+            budget = `$${budget}`
+
+        technologies = technologies.toLowerCase().replace(/, /g, ',')
+        
+        Gig.create({
+            title: title,
+            technologies: technologies,
+            budget: budget,
+            description: description,
+            contact_email: contact_email,
+            createdAt: new Date().toISOString()
+        })
         .then(gig => res.redirect('/gigs'))
         .catch(err => console.log(err))
+    }
 })
 
 module.exports = router
