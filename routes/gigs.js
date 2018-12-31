@@ -70,7 +70,7 @@ router.post('/add', (req, res) => {
 
 // Search Gig
 router.get('/search', (req, res) => {
-    const {term} = req.query;
+    let {term} = req.query;
 
     term = term.toLowerCase();
 
