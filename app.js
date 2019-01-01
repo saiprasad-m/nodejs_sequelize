@@ -1,6 +1,7 @@
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const path = require('path');
+const serverless = require('serverless-http');
 
 const db = require('./config/database');
 db.authenticate()
